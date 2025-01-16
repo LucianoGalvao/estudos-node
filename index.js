@@ -29,8 +29,9 @@ function operation() {
       const action = res["action"];
       if (action === "Criar Conta") {
         createAccount();
-      } else if (action === "Consultar Saldo") {
       } else if (action === "Depositar") {
+        deposit();
+      } else if (action === "Consultar Saldo") {
       } else if (action === "Sacar") {
       } else if (action === "Sair") {
         console.log(chalk.bgCyan.black("Obrigado por usar o Accounts!"));
@@ -41,13 +42,13 @@ function operation() {
 }
 
 // Criando conta
-
 function createAccount() {
   console.log(chalk.bgGreen.black("Parabéns por escolher o nosso banco!"));
   console.log(chalk.green("Defina as opções de conta a seguir"));
   buildAccount();
 }
 
+// Verifica o nome e cria de fato a conta
 function buildAccount() {
   inquirer
     .prompt([
@@ -69,7 +70,7 @@ function buildAccount() {
           chalk.bgRed.black("Esta conta já existe, escolha outro nome!")
         );
         buildAccount();
-        return
+        return;
       }
 
       fs.writeFileSync(
@@ -84,4 +85,33 @@ function buildAccount() {
       operation();
     })
     .catch((err) => console.error(err));
+}
+
+function deposit() {
+  inquirer
+    .prompt([
+      {
+        name: "accountName",
+        message: "Qual é o nome da sua conta?",
+      },
+    ])
+    .then((req) => {
+      const accountName = req["accountName"];
+      // Vefifica conta
+
+      if(!checkAccount(accountName)) {
+        return deposit()
+      }
+    })
+    .catch((err) => console.error(err));
+}
+
+function checkAccount(accountName) {
+  // Implementar a verificação da conta
+  if (!fs.existsSync(`accounts/${accountName}.json`)) {
+    console.log(chalk.bgRed.black("Esta conta não existe, tente novamente!"));
+    return false;
+  }
+
+  return true;
 }
