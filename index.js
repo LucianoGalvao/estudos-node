@@ -34,6 +34,7 @@ function operation() {
       } else if (action === "Consultar Saldo") {
         getAccountBalance();
       } else if (action === "Sacar") {
+        withdraw();
       } else if (action === "Sair") {
         console.log(chalk.bgCyan.black("Obrigado por usar o Accounts!"));
         process.exit();
@@ -96,8 +97,8 @@ function deposit() {
         message: "Qual é o nome da sua conta?",
       },
     ])
-    .then((req) => {
-      const accountName = req["accountName"];
+    .then((res) => {
+      const accountName = res["accountName"];
       // Vefifica conta
 
       if (!checkAccount(accountName)) {
@@ -180,6 +181,71 @@ function getAccountBalance() {
       console.log(
         chalk.bgCyan.black(`O saldo da sua conta é de R$${accountData.balance}`)
       );
+      operation();
     })
     .catch((err) => console.error(err));
+}
+
+function withdraw() {
+  inquirer
+    .prompt([
+      {
+        name: "accountName",
+        message: "Qual é o nome da sua conta?",
+      },
+    ])
+    .then((res) => {
+      const accountName = res["accountName"];
+      if (!checkAccount(accountName)) {
+        return withdraw();
+      }
+      inquirer
+        .prompt([
+          {
+            name: "amount",
+            message: "Qual o valor para sacar?",
+          },
+        ])
+        .then((res) => {
+          const amount = res["amount"];
+          withdrawAmount(accountName, amount);
+        });
+    })
+    .catch((err) => console.error(err));
+}
+
+function withdrawAmount(accountName, amount) {
+  const accountData = getAccount(accountName);
+
+  if (!amount) {
+    console.log(
+      chalk.bgRed.black("Ocorreu um erro, tente novamente mais tarde")
+    );
+    return withdraw();
+  }
+
+  if (accountData.balance < amount) {
+    console.log(
+      chalk.bgRed.white(
+        "O valor disponível na conta é insuficiente, corrija o valor"
+      )
+    );
+    return withdraw();
+  }
+
+  accountData.balance = parseFloat(accountData.balance) - parseFloat(amount);
+
+  fs.writeFileSync(
+    `accounts/${accountName}.json`,
+    JSON.stringify(accountData),
+    function (err) {
+      console.error(err);
+    }
+  );
+
+  console.log(
+    chalk.bgCyan.black(`O valor de R$${amount} foi sacado de sua conta!`)
+  );
+
+  return operation();
 }
