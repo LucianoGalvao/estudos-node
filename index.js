@@ -115,7 +115,6 @@ function deposit() {
         .then((res) => {
           const amount = res["amount"];
           addAmount(accountName, amount);
-          operation();
         })
         .catch((err) => console.error(err));
     })
@@ -152,6 +151,7 @@ function addAmount(accountName, amount) {
   );
 
   console.log(chalk.green(`Foi depositado R$${amount} na sua conta.`));
+  operation()
 }
 
 function getAccount(accountName) {
