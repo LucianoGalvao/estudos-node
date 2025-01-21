@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const accountNumberFile = path.join(__dirname, "../data/countingAccounts.json");
+const accountNumberFile = path.join(__dirname, "../utils/countingAccounts.json");
 
 function getNextAccountNumber() {
   if (!fs.existsSync(accountNumberFile)) {
