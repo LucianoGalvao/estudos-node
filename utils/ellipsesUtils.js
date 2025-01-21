@@ -22,7 +22,7 @@ function ellipsisUtils(message, success, duration = 3000) {
       process.stdout.write(success);
       process.stdout.write("\n");
 
-      resolve(); // Indica que o processo terminou
+      resolve();
     }, duration);
   });
 }

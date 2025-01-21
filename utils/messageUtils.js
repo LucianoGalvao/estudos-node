@@ -3,7 +3,7 @@ const chalk = require("chalk");
 const messages = {
   welcome: chalk.bold.greenBright("Seja bem-vindo ao Accounts!"),
   options: chalk.blue("O que deseja fazer?"),
-  createAccount: chalk.bgGreen.black("Parabéns por escolher o nosso banco!"),
+  createAccount: chalk.bgGreen.black("Obrigado por escolher o nosso banco!"),
   accountName: chalk.green("Informe seu nome:"),
   invalidAccountName: chalk.bgRed.white("O nome é obrigatório, favor informar"),
   accountNameSuccess: (name) =>
@@ -19,6 +19,7 @@ const messages = {
     chalk.bgGreen.black(
       `${name}, parabéns, a sua conta ${number} já está criada e disponível para uso!`
     ),
+    exit: chalk.bgCyan.black("Obrigado por usar o Accounts!")
 };
 
 module.exports = messages;

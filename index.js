@@ -1,106 +1,15 @@
 const inquirer = require("inquirer");
 const chalk = require("chalk");
 const fs = require("fs");
-
+const operation = require("./services/operation");
 const messages = require("./utils/messageUtils.js");
-const prompts = require("./views/prompts.js");
 
-operation();
-
-function operation() {
+function startApp() {
   console.log(messages.welcome);
-  prompts
-    .getAction()
-    .then((res) => {
-      const action = res.action;
-
-      switch (action) {
-        case "Criar conta":
-          createAccount();
-          break;
-      }
-    })
-    .catch((err) => console.error(err));
-
-  // inquirer
-  //   .prompt([
-  //     {
-  //       type: "list",
-  //       name: "action",
-  //       message: messages.options,
-  //       choices: [
-  //         "Criar conta",
-  //         "Entrar na conta",
-  //         // "Consultar Saldo",
-  //         // "Depositar",
-  //         // "Sacar",
-  //         "Sair",
-  //       ],
-  //     },
-  //   ])
-  //   .then((res) => {
-  //     const action = res["action"];
-  //     if (action === "Criar Conta") {
-  //       createAccount();
-  //     } else if (action === "Depositar") {
-  //       deposit();
-  //     } else if (action === "Consultar Saldo") {
-  //       getAccountBalance();
-  //     } else if (action === "Sacar") {
-  //       withdraw();
-  //     } else if (action === "Sair") {
-  //       console.log(chalk.bgCyan.black("Obrigado por usar o Accounts!"));
-  //       process.exit();
-  //     }
-  //   })
-  //   .catch((err) => console.error(err));
+  operation();
 }
 
-// Criando conta
-function createAccount() {
-  console.log(chalk.bgGreen.black("Parabéns por escolher o nosso banco!"));
-  console.log(chalk.green("Defina as opções de conta a seguir"));
-  buildAccount();
-}
-
-// Verifica o nome e cria de fato a conta
-function buildAccount() {
-  inquirer
-    .prompt([
-      {
-        name: "accountName",
-        message: "Digite um nome para a sua conta:",
-      },
-    ])
-    .then((res) => {
-      const accountName = res["accountName"];
-
-      console.info(accountName);
-
-      if (!fs.existsSync("accounts")) {
-        fs.mkdirSync("accounts");
-      }
-      if (fs.existsSync(`accounts/${accountName}.json`)) {
-        console.log(
-          chalk.bgRed.black("Esta conta já existe, escolha outro nome!")
-        );
-        buildAccount();
-        return;
-      }
-
-      fs.writeFileSync(
-        `accounts/${accountName}.json`,
-        '{ "balance": 0 }',
-        function (err) {
-          console.error(err);
-        }
-      );
-
-      console.log(chalk.green("Parabéns, sua conta foi criada com sucesso!"));
-      operation();
-    })
-    .catch((err) => console.error(err));
-}
+startApp();
 
 function deposit() {
   inquirer
