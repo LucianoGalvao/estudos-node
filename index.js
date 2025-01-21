@@ -1,46 +1,59 @@
-// modulos externos
 const inquirer = require("inquirer");
 const chalk = require("chalk");
-
-// modulos nativos
 const fs = require("fs");
 
-// inicialização
+const messages = require("./utils/messageUtils.js");
+const prompts = require("./views/prompts.js");
 
 operation();
 
 function operation() {
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "action",
-        message: "O que você deseja fazer?",
-        choices: [
-          "Criar Conta",
-          "Consultar Saldo",
-          "Depositar",
-          "Sacar",
-          "Sair",
-        ],
-      },
-    ])
+  console.log(messages.welcome);
+  prompts
+    .getAction()
     .then((res) => {
-      const action = res["action"];
-      if (action === "Criar Conta") {
-        createAccount();
-      } else if (action === "Depositar") {
-        deposit();
-      } else if (action === "Consultar Saldo") {
-        getAccountBalance();
-      } else if (action === "Sacar") {
-        withdraw();
-      } else if (action === "Sair") {
-        console.log(chalk.bgCyan.black("Obrigado por usar o Accounts!"));
-        process.exit();
+      const action = res.action;
+
+      switch (action) {
+        case "Criar conta":
+          createAccount();
+          break;
       }
     })
     .catch((err) => console.error(err));
+
+  // inquirer
+  //   .prompt([
+  //     {
+  //       type: "list",
+  //       name: "action",
+  //       message: messages.options,
+  //       choices: [
+  //         "Criar conta",
+  //         "Entrar na conta",
+  //         // "Consultar Saldo",
+  //         // "Depositar",
+  //         // "Sacar",
+  //         "Sair",
+  //       ],
+  //     },
+  //   ])
+  //   .then((res) => {
+  //     const action = res["action"];
+  //     if (action === "Criar Conta") {
+  //       createAccount();
+  //     } else if (action === "Depositar") {
+  //       deposit();
+  //     } else if (action === "Consultar Saldo") {
+  //       getAccountBalance();
+  //     } else if (action === "Sacar") {
+  //       withdraw();
+  //     } else if (action === "Sair") {
+  //       console.log(chalk.bgCyan.black("Obrigado por usar o Accounts!"));
+  //       process.exit();
+  //     }
+  //   })
+  //   .catch((err) => console.error(err));
 }
 
 // Criando conta
@@ -151,7 +164,7 @@ function addAmount(accountName, amount) {
   );
 
   console.log(chalk.green(`Foi depositado R$${amount} na sua conta.`));
-  operation()
+  operation();
 }
 
 function getAccount(accountName) {
