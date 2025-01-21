@@ -13,4 +13,13 @@ function getAction() {
   ]);
 }
 
-module.exports = { getAction };
+function getAccountName() {
+  return inquirer.prompt([
+    {
+      name: "accountName",
+      message: messages.accountName,
+    },
+  ]);
+}
+
+module.exports = { getAction, getAccountName };
