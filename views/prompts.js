@@ -22,4 +22,15 @@ function getAccountName() {
   ]);
 }
 
-module.exports = { getAction, getAccountName };
+function getAccountPassword() {
+  return inquirer.prompt([
+    {
+      name: "accountPassword",
+      type: "password",
+      mask: true,
+      message: messages.accountPassword,
+    },
+  ]);
+}
+
+module.exports = { getAction, getAccountName, getAccountPassword };
