@@ -5,6 +5,13 @@ const operation = require("./services/operation");
 const messages = require("./utils/messageUtils.js");
 
 function startApp() {
+  console.log(`
+                                        _       
+     /\                            | |      
+    /  \   ___ ___ ___  _   _ _ __ | |_ ___ 
+   / /\ \ / __/ __/ _ \| | | | '_ \| __/ __|
+  / ____ \ (_| (_| (_) | |_| | | | | |_\__ \
+ /_/    \_\___\___\___/ \__,_|_| |_|\__|___/`)
   console.log(messages.welcome);
   operation();
 }
